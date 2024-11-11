@@ -17,7 +17,7 @@ interface MetadataProps {
 }
 
 export const generateMetadata = ({
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Smart Social Media Marketing Platform`,
+    title = `Orbit AI - Smart Social Media Marketing Platform by Vinojan`,
     description = "Streamline your social media management with AI-powered analytics, scheduling, and content optimization. Get real-time insights, automate posts, and boost engagement across all platforms",
     image = "/thumbnail.png",
     icons = [
@@ -43,15 +43,15 @@ export const generateMetadata = ({
         "artificial intelligence",
         "content marketing"
     ],
-    author = process.env.NEXT_PUBLIC_AUTHOR_NAME,
-    twitterHandle = "@yourtwitterhandle",
+    author = "Vinojan Veerapathirathasan",
+    twitterHandle = "@imvinojanv",
     type = "website",
     locale = "en_US",
     alternates = {},
     publishedTime,
     modifiedTime
 }: MetadataProps = {}): Metadata => {
-    const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL || "https://luro-ai.vercel.app");
+    const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL || "https://orbit-ai.vercel.app");
     const imageUrl = image ? new URL(image, metadataBase).toString() : null;
 
     return {
