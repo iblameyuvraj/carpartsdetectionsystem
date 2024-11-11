@@ -1,10 +1,16 @@
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 
 import { generateMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+    weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+    style: ['normal', 'italic'],
+    subsets: ['latin'],
+    display: 'swap',
+});
 
 export const metadata = generateMetadata();
 
@@ -18,7 +24,7 @@ export default function RootLayout({
             <body
                 className={cn(
                     "min-h-screen bg-background text-foreground antialiased font-default overflow-x-hidden !scrollbar-hide",
-                    inter.className
+                    poppins.className
                 )}
             >
                 {children}
