@@ -6,7 +6,7 @@
 
 ## 🔗 Live Preview
 
-Check out the live demo of Orbit here: [Live Preview](http://orbit-ai.vercel.app)
+Check out the live demo of Orbit here: [Live Preview](http://orbitai-ui.vercel.app)
 
 
 ## 💻 Tech Stack
