@@ -24,8 +24,13 @@ export default function RootLayout({
             <body
                 className={cn(
                     "min-h-screen bg-background text-foreground antialiased font-default overflow-x-hidden !scrollbar-hide",
-                    poppins.className
+                    inter.className
                 )}
+                style={{
+                    fontFamily: inter.style.fontFamily,
+                    fontWeight: inter.style.fontWeight,
+                    fontStyle: inter.style.fontStyle,
+                }}
             >
                 {children}
             </body>
