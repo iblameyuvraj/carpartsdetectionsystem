@@ -67,9 +67,6 @@ const Footer = () => {
                         <Link href="#" className="p-1">
                             <Icons.twitter className="w-5 h-5 text-muted-foreground hover:text-secondary-foreground" />
                         </Link>
-                        <Link href="#" className="p-1">
-                            <Icons.discord className="w-5 h-5 text-muted-foreground hover:text-secondary-foreground" />
-                        </Link>
                     </div>
                 </Wrapper>
             </Container>

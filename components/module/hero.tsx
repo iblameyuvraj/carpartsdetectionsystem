@@ -29,12 +29,12 @@ const Hero = () => {
                 </div>
             </Container>
             <BlurText
-                word={"Your ultimate social media\n marketing tool"}
+                word={"Fast & Accurate Automotive Parts Identification"}
                 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent py-2 md:py-0 lg:!leading-snug font-medium racking-[-0.0125em] mt-6 font-heading"
             />
             <Container delay={0.1}>
                 <p className="text-sm sm:text-base lg:text-lg mt-4 text-accent-foreground/60 max-w-2xl mx-auto">
-                    Elevate your social media presense with AI-powered content creation and scheduling. <span className="hidden sm:inline">Orbit is the all-in-one solution for your social media marketing needs.</span>
+                    Upgrade Your Workshop with Advanced Part Detection Technology. <span className="hidden sm:inline">Orbit-The Smartest Way to Identify & Manage Car Parts.</span>
                 </p>
             </Container>
             <Container delay={0.2}>

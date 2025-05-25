@@ -1,3 +1,5 @@
+// need changess of logo
+
 "use client"
 
 import React from 'react';
@@ -49,19 +51,19 @@ const Menu = () => {
                                             Orbit AI
                                         </div>
                                         <p className="text-sm text-muted-foreground">
-                                            Your ultimate social media management tool
+                                            AI-Driven Precision for Automotive Identification, Diagnostics, and Repair
                                         </p>
                                     </Link>
                                 </NavigationMenuLink>
                             </li>
-                            <Item title="Content Calendar" href="/features/content-calendar" icon={<CalendarRangeIcon className="w-5 h-5" />}>
-                                Plan and visualize your content strategy.
+                            <Item title="Real Time Part Recognition" href="/features/content-calendar" icon={<CalendarRangeIcon className="w-5 h-5" />}>
+                                Parts are recognized and gave you the car-part link.
                             </Item>
-                            <Item title="Hashtag Manager" href="/features/hashtag-manager" icon={<HashIcon className="w-5 h-5" />}>
-                                Research and track trending hashtags.
+                            <Item title="Multi-Vehicle Support" href="/features/hashtag-manager" icon={<HashIcon className="w-5 h-5" />}>
+                                Recognizes parts for all vehicles using a 50,000+ part database.
                             </Item>
                             <Item title="Competitor Analysis" href="/features/competitor-analysis" icon={<UsersIcon className="w-5 h-5" />}>
-                                Monitor and analyze competitor performance.
+                                Monitor given part link.
                             </Item>
                         </ul>
                     </NavigationMenuContent>

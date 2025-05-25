@@ -10,10 +10,10 @@ const Connect = () => {
                 <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
                     <SectionBadge title="Connect Tools" />
                     <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-medium !leading-snug mt-6">
-                        Seamless Integration with your favorite tools
+                        Mechanic-Friendly Content Templates
                     </h2>
                     <p className="text-base md:text-lg text-center text-accent-foreground/80 mt-6">
-                        We support a wide range of integrations to help you connect your favorite tools with our platform
+                        Access ready-made templates for repair tips and easily share helpful YouTube videos.
                     </p>
                 </div>
             </Container>

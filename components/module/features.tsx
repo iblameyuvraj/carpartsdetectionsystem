@@ -1,3 +1,4 @@
+// ALMOST DONE BUT SHOULD CHECK ONCE
 "use client";
 
 import Container from "@/components/global/container";
@@ -17,7 +18,7 @@ const Features = () => {
                         Create content faster <br /> and smarter
                     </h2>
                     <p className="text-base md:text-lg text-center text-accent-foreground/80 mt-6">
-                        Transform your social media strategy with Orbit AI&apos;s cutting-edge features, designed to optimize your content creation and engagement like never before.
+                        Transform your auto shop workflow with Orbit's advanced part detection, designed to optimize your repair accuracy and efficiency like never before.
                     </p>
                 </div>
             </Container>
@@ -60,10 +61,10 @@ const Features = () => {
                                     </div>
                                     <div className="flex flex-col mt-auto">
                                         <h4 className="text-xl font-heading font-medium heading">
-                                            Content ideation
+                                            Precision Identification
                                         </h4>
                                         <p className="text-sm md:text-base mt-2 text-muted-foreground">
-                                            Generate ideas for your content with our AI-powered tools to create engaging posts in seconds.
+                                            Instantly match any part with 99.9% accuracy.
                                         </p>
                                     </div>
                                 </div>
@@ -98,10 +99,10 @@ const Features = () => {
                                 <div className="bento-card w-full flex-row gap-6">
                                     <div className="flex flex-col mb-auto">
                                         <h4 className="text-xl font-heading font-medium heading ">
-                                            Seamless integrations
+                                            Massive Parts Databas
                                         </h4>
                                         <p className="text-sm md:text-base mt-2 text-muted-foreground">
-                                            Connect your favorite tools and platforms to streamline your workflow and save time.
+                                            50,000+ entries covering all makes and models.
                                         </p>
                                     </div>
                                     <div className="w-full h-28 relative">
@@ -121,10 +122,10 @@ const Features = () => {
                                     </div>
                                     <div className="flex flex-col mt-auto">
                                         <h4 className="text-xl font-heading font-medium heading ">
-                                            Image generation with AI
+                                            The Future of Auto Repair Starts Here.
                                         </h4>
                                         <p className="text-sm md:text-base mt-2 text-muted-foreground">
-                                            Create stunning images with AI-powered tools in seconds.
+                                            Smarter Parts Management Starts Here
                                         </p>
                                     </div>
                                 </div>
@@ -136,10 +137,10 @@ const Features = () => {
                                     </div>
                                     <div className="flex flex-col mt-auto">
                                         <h4 className="text-xl font-heading font-medium heading ">
-                                            Hashtags suggestions
+                                            Fault Detection & Diagnostics
                                         </h4>
                                         <p className="text-sm md:text-base mt-2 text-muted-foreground">
-                                            Get hashtag suggestions based on your content and audience to increase your reach and engagement.
+                                            Flag worn, damaged, or mismatched parts by analyzing wear patterns, corrosion, or incorrect installations.
                                         </p>
                                     </div>
                                 </div>

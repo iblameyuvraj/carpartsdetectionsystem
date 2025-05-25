@@ -1,3 +1,6 @@
+// DONEEEE but have to conformationss
+
+
 "use client";
 
 import Link from "next/link";
@@ -94,17 +97,17 @@ const Plan = ({
     plan: Plan;
 }) => {
 
-    const getDisplayedPrice = (plan: string, monthlyPrice: number, yearlyPrice: number) => {
+    const getDisplayedPrice = (plan: string, monthlyPrice: number, yearlyPrice: number, conversionRate: number) => {
         if (plan === "monthly") {
-            return monthlyPrice === 0 ? 0 : monthlyPrice;
+            return monthlyPrice === 0 ? 0 : Math.round(monthlyPrice * conversionRate);
         } else if (plan === "yearly") {
-            const discountedPrice = Math.round((yearlyPrice * 0.8) / 12);
+            const discountedPrice = Math.round((yearlyPrice * 0.8) / 12 * conversionRate);
             return yearlyPrice === 0 ? 0 : discountedPrice;
         }
         return 0;
     };
 
-    const displayedPrice = getDisplayedPrice(plan, monthlyPrice, yearlyPrice);
+    const displayedPrice = getDisplayedPrice(plan, monthlyPrice, yearlyPrice, 80); // Assuming 1 USD = 80 INR
 
     return (
         <div key={index} className="w-full relative flex flex-col saturate-150 rounded-2xl">
@@ -135,7 +138,7 @@ const Plan = ({
                     <div className="flex items-end gap-2">
                         <div className="flex items-end gap-1 w-40">
                             <span className="text-3xl md:text-4xl font-bold">
-                                ${displayedPrice === 0 ? 0 : <NumberTicker value={displayedPrice} />}
+                                 ₹{displayedPrice === 0 ? 0 : <NumberTicker value={displayedPrice} />}
                             </span>
                             {/* In here 120 * 0.8 = 96 and /12 to get monthly price */}
                             <span className="text-lg text-muted-foreground font-medium font-headin">

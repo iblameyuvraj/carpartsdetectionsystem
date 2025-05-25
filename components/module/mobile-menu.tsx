@@ -1,3 +1,4 @@
+// need changes
 "use client";
 
 import React from 'react';
@@ -66,7 +67,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: Props) => {
                                 >
                                     <Link href="/" className="flex items-center w-full text-start">
                                         <Captions className="w-4 h-4 mr-2" />
-                                        Caption Generation
+                                        soon
                                     </Link>
                                 </li>
                                 <li
@@ -74,7 +75,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: Props) => {
                                 >
                                     <Link href="/" className="flex items-center w-full text-start">
                                         <CalendarClock className="w-4 h-4 mr-2" />
-                                        Post Scheduling
+                                        soon
                                     </Link>
                                 </li>
                                 <li
@@ -128,7 +129,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: Props) => {
                                 >
                                     <Link href="/" className="flex items-center w-full text-start">
                                         <FileText className="w-4 h-4 mr-2" />
-                                        Case Studies
+                                        soon 
                                     </Link>
                                 </li>
                                 <li

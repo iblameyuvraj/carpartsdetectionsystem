@@ -1,3 +1,5 @@
+// DONEEEEEEEEEE
+
 import { LucideIcon } from "lucide-react";
 
 import { PERKS } from "@/constants";
@@ -15,7 +17,7 @@ const Perks = () => {
                         Discover the benefits
                     </h2>
                     <p className="text-base md:text-lg text-center text-accent-foreground/80 mt-6">
-                        Explore the powerful features and advantages that Orbit offer to help you grow your social media presence
+                        Explore the powerful features and advantages that Orbito offers to revolutionize automotive workflows, enhance part identification accuracy.
                     </p>
                 </div>
             </Container>
