@@ -18,7 +18,7 @@ const Features = () => {
                         Create content faster <br /> and smarter
                     </h2>
                     <p className="text-base md:text-lg text-center text-accent-foreground/80 mt-6">
-                        Transform your auto shop workflow with Orbit's advanced part detection, designed to optimize your repair accuracy and efficiency like never before.
+                        Transform your auto shop workflow with Orbit&apos;s advanced part detection, designed to optimize your repair accuracy and efficiency like never before.
                     </p>
                 </div>
             </Container>
