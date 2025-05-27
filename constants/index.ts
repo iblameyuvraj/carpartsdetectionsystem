@@ -16,57 +16,56 @@ export const PLANS: PLAN[] = [
     {
         id: "free",
         title: "Free",
-        desc: "Get started with essential tools for social media content creation",
+        desc: "Get started with essential tools for AI car part detection.",
         monthlyPrice: 0,
         yearlyPrice: 0,
         buttonText: "Get Started",
         features: [
-            "Basic AI content generation",
-            "4 social media integrations",
+            "Basic car part detection",
+            "Upload up to 100 images/month",
             "Community support",
             "1 project limit",
-            "Standard analytics",
-            "Basic image generation"
+            "Standard detection analytics",
+            "Basic reporting"
         ],
         link: "https://stripe.com/free-plan-link"
     },
     {
         id: "pro",
         title: "Pro",
-        desc: "Unlock advance features for enhanced content and strategy",
+        desc: "Unlock advanced features for more accurate and faster car part detection.",
         monthlyPrice: 10,
         yearlyPrice: 120,
         badge: "Most Popular",
         buttonText: "Upgrade to Pro",
         features: [
-            "Advanced AI content generation",
-            "10 social media integrations",
+            "Advanced AI detection models",
+            "Upload up to 2,000 images/month",
             "Priority email support",
             "10 project limit",
-            "Enhanced analytics & insights",
-            "Pro model image generation",
+            "Detailed analytics & insights",
+            "Batch image processing",
             "Team collaboration tools",
-            "Custom branding options"
+            "Custom detection reports"
         ],
         link: "https://stripe.com/pro-plan-link"
     },
     {
         id: "enterprise",
         title: "Enterprise",
-        desc: "Tailored solutions for large organizations and agencies",
+        desc: "Tailored AI car part detection solutions for large organizations and automotive businesses.",
         monthlyPrice: 15,
         yearlyPrice: 180,
         badge: "Contact Sales",
         buttonText: "Upgrade to Enterprise",
         features: [
-            "Unlimited AI content generation",
-            "All social media integrations",
+            "Unlimited image uploads",
+            "All detection models included",
             "Dedicated account manager",
             "Unlimited projects",
             "Custom analytics & reporting",
             "Enterprise-grade security",
-            "Free updates",
-            // "24/7 priority support"
+            "Free updates"
         ],
         link: "https://stripe.com/enterprise-plan-link"
     }
@@ -83,73 +82,73 @@ export const REVIEWS: REVIEW[] = [
     {
         name: "Arjun Singh",
         username: "@arjunsingh",
-        review: "This platform has revolutionized the way I manage my projects. The AI tools are a game-changer!",
+        review: "The AI car part detection system has streamlined our inspection process. Highly accurate and easy to use!",
         img: "https://randomuser.me/api/portraits/men/1.jpg"
     },
     {
         name: "Priya Nair",
         username: "@priyanair",
-        review: "Absolutely love the seamless integration with social media. It's made my content creation process so much easier.",
+        review: "Uploading images and getting instant car part identification saves us hours every week.",
         img: "https://randomuser.me/api/portraits/women/2.jpg"
     },
     {
         name: "Rohan Mehta",
         username: "@rohanmehta",
-        review: "The features offered here are unmatched. My productivity has soared since I started using this service.",
+        review: "The detection accuracy is impressive. Our team relies on it for quality checks.",
         img: "https://randomuser.me/api/portraits/men/3.jpg"
     },
     {
         name: "Sneha Patel",
         username: "@snehapatel",
-        review: "Customer support is top-notch. They’re always ready to assist with any queries I have.",
+        review: "Customer support is responsive and knowledgeable about automotive AI.",
         img: "https://randomuser.me/api/portraits/women/4.jpg"
     },
     {
         name: "Ankit Sharma",
         username: "@ankitsharma",
-        review: "The customization options available are perfect for my business needs. Highly recommended!",
+        review: "Custom reporting helps us track part defects and improve our workflow.",
         img: "https://randomuser.me/api/portraits/men/5.jpg"
     },
     {
         name: "Meera Kapoor",
         username: "@meerakapoor",
-        review: "The intuitive design and ease of use make this platform stand out. It's a must-have for any business.",
+        review: "The platform is intuitive and fits perfectly into our inspection process.",
         img: "https://randomuser.me/api/portraits/women/6.jpg"
     },
     {
         name: "Vikram Desai",
         username: "@vikramdesai",
-        review: "From analytics to AI-powered tools, this service covers everything I need to grow my business.",
+        review: "From analytics to batch processing, this system covers all our needs.",
         img: "https://randomuser.me/api/portraits/men/7.jpg"
     },
     {
         name: "Anjali Menon",
         username: "@anjalimenon",
-        review: "I’m impressed with how much value I’m getting at this price point. It's worth every penny!",
+        review: "Great value for the price. The detection speed is unmatched.",
         img: "https://randomuser.me/api/portraits/women/8.jpg"
     },
     {
         name: "Karan Gupta",
         username: "@karangupta",
-        review: "The AI content generation is phenomenal. It saves me hours of work every week.",
+        review: "AI-powered detection has reduced our manual work significantly.",
         img: "https://randomuser.me/api/portraits/men/9.jpg"
     },
     {
         name: "Neha Verma",
         username: "@nehaverma",
-        review: "I love how everything is organized in one place. It makes managing my tasks so much easier.",
+        review: "Everything is organized and easy to access. Detection results are clear and actionable.",
         img: "https://randomuser.me/api/portraits/women/10.jpg"
     },
     {
         name: "Siddharth Jain",
         username: "@siddharthjain",
-        review: "Their platform is robust, and I have seen a significant improvement in my workflow since I started using it.",
+        review: "Robust platform with continuous improvements. Highly recommended for automotive businesses.",
         img: "https://randomuser.me/api/portraits/men/11.jpg"
     },
     {
         name: "Divya Iyer",
         username: "@divyaiyer",
-        review: "Fantastic service! The updates and new features keep getting better and better.",
+        review: "Fantastic service! The detection models keep getting better and more accurate.",
         img: "https://randomuser.me/api/portraits/women/12.jpg"
     }
 ];
@@ -197,32 +196,32 @@ export const FOOTER_LINKS = [
 export const PERKS = [
     {
         icon: ZapIcon,
-        title: "Fast and Efficient",
-        description: "Experience quick and seamless content creation with our optimized AI tools."
+        title: "Fast Detection",
+        description: "Experience quick and accurate car part identification with our optimized AI models."
     },
     {
         icon: ChartSplineIcon,
-        title: "Insightful Analytics",
-        description: "Gain valuable insights and analytics to enhance your social media strategy."
+        title: "Detailed Analytics",
+        description: "Gain valuable insights and analytics on detected car parts and inspection results."
     },
     {
         icon: LifeBuoyIcon,
         title: "24/7 Support",
-        description: "Our team is available around the clock to assist with any issues or questions."
+        description: "Our team is available around the clock to assist with any technical issues or questions."
     },
     {
         icon: PaletteIcon,
-        title: "Customizable Solutions",
-        description: "Tailor the tools and features to fit your unique social media needs."
+        title: "Customizable Workflows",
+        description: "Tailor detection workflows and reports to fit your automotive business needs."
     },
     {
         icon: ShieldCheckIcon,
         title: "Secure and Reliable",
-        description: "Trust our platform to keep your data safe and ensure consistent performance."
+        description: "Trust our platform to keep your data safe and ensure consistent detection performance."
     },
     {
         icon: WaypointsIcon,
         title: "Seamless Integration",
-        description: "Easily integrate with your existing social media platforms and tools."
+        description: "Easily integrate with your existing automotive tools and platforms."
     },
 ];

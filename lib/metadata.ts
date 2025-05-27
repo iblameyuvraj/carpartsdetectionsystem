@@ -17,8 +17,8 @@ interface MetadataProps {
 }
 
 export const generateMetadata = ({
-    title = `Orbit AI - Smart Social Media Marketing Platform by Vinojan`,
-    description = "Streamline your social media management with AI-powered analytics, scheduling, and content optimization. Get real-time insights, automate posts, and boost engagement across all platforms",
+    title = `Orbit AI `,
+    description = "AI-powered car part detection system that streamlines automotive diagnostics and inventory management by accurately identifying car parts from images using advanced machine learning algorithms.",
     image = "/thumbnail.png",
     icons = [
         {
@@ -43,15 +43,15 @@ export const generateMetadata = ({
         "artificial intelligence",
         "content marketing"
     ],
-    author = "Vinojan Veerapathirathasan",
-    twitterHandle = "@imvinojanv",
+    author = "Yuvraj soni and aryan arror",
+    twitterHandle = "@iblameyuvrajj",
     type = "website",
     locale = "en_US",
     alternates = {},
     publishedTime,
     modifiedTime
 }: MetadataProps = {}): Metadata => {
-    const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL || "https://orbit-ai.vercel.app");
+    const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL || "https://carpartsdetection.netlify.app");
     const imageUrl = image ? new URL(image, metadataBase).toString() : null;
 
     return {
