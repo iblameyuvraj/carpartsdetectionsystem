@@ -10,6 +10,7 @@ import Perks from '@/components/module/perks';
 import Pricing from '@/components/module/pricing';
 import Reviews from '@/components/module/reviews';
 import CTA from '@/components/module/cta';
+import SignUpForm from '@/components/module/SignUpForm';
 
 const HomePage = () => {
     return (

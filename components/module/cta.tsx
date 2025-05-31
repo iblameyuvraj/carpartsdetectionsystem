@@ -22,7 +22,7 @@ const CTA = () => {
                         </p>
                         <div className="flex flex-col md:flex-row items-center justify-center w-full gap-6 mt-6">
                             <Button asChild size="lg" className="w-full md:w-max">
-                                <Link href="#">
+                                <Link href="/sign-up">
                                     Get Started
                                 </Link>
                             </Button>

@@ -1,5 +1,6 @@
 import Footer from '@/components/module/footer';
 import Navbar from '@/components/module/navbar';
+import SignUpForm from '@/components/module/SignUpForm';
 
 interface Props {
     children: React.ReactNode
