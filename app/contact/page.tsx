@@ -43,7 +43,7 @@ export default function ContactPage() {
 
     // Create animated network/constellation
     const nodes: THREE.Mesh[] = [];
-    const connections = [];
+    const connections: { line: THREE.Line; nodeA: THREE.Mesh; nodeB: THREE.Mesh }[] = [];
     const nodeCount = 25;
 
     // Create nodes (glowing spheres)
