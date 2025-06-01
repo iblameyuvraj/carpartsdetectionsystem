@@ -13,8 +13,8 @@ interface FormData {
 }
 
 interface FormErrors {
-  email?: string;
-  password?: string;
+  email?: string | React.ReactElement;
+  password?: string | React.ReactElement;
 }
 
 interface Particle {
