@@ -2,11 +2,11 @@
 
 # 🔗 Orbit - AI Powered Content Creation Platform (Landing Page UI)
 
-<img src="https://github.com/user-attachments/assets/035005bb-ca53-46ab-92c7-5345a0ec235d" alt="Orbit Thumbnail" style="border-radius: 12px;" width="1280">
+<img src="/public/images/git.png" alt="Orbit Thumbnail" style="border-radius: 12px;" width="1280">
 
 ## 🔗 Live Preview
 
-Check out the live demo of Orbit here: [Live Preview](http://orbitai-ui.vercel.app)
+Check out the live demo of Orbit here: [Live Preview](http://carpartsdetection.netlify.app)
 
 
 ## 💻 Tech Stack
@@ -23,7 +23,7 @@ To run Orbit locally, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/imvinojanv/saas-landing-ui.git
+    git clone https://github.com/iblameyuvraj/carpartsdetectionsystem
     ```
 2. Install dependencies:
     ```bash
@@ -35,8 +35,4 @@ To run Orbit locally, follow these steps:
     ```
 
 ## 💬 Contact
-If you have any questions or feedback, feel free to reach out via [GitHub Issues](https://github.com/imvinojanv/saas-landing-ui/issues).
-
----
-
-Built with ❤️ by [imvinojanv](https://www.linkedin.com/in/imvinojanv/)
+If you have any questions or feedback, feel free to reach out via [GitHub Issues](https://github.com/iblameyuvraj/carpartsdetectionsystem/issues).
