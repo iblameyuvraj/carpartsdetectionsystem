@@ -58,7 +58,25 @@ const Footer = () => {
             <Container>
                 <Wrapper className="pt-10 flex items-center justify-between relative">
                     <p className="text-sm text-secondary-foreground">
-                        &copy; {new Date().getFullYear()} Orbit AI. All rights reserved.
+                        &copy; <span id="currentYear"></span> Orbit AI. All rights reserved. made by
+                        <a
+                            href="https://yuvraj.site/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-purple-300 transition-colors duration-200"
+                        >
+                            {" "}
+                            yuvraj{" "}
+                        </a>
+                        &nbsp;&amp;&nbsp;
+                        <a
+                            href="https://www.peppeble.xyz/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-purple-300 transition-colors duration-200"
+                        >
+                            peppeble studio
+                        </a>
                     </p>
                     <div className="flex items-center gap-4">
                         <Link href="#" className="p-1">

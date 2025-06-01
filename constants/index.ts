@@ -184,8 +184,6 @@ export const FOOTER_LINKS = [
     {
         title: "Developers",
         links: [
-            { name: "API Docs", href: "/api-docs" },
-            { name: "SDKs", href: "/sdks" },
             { name: "Tools", href: "/tools" },
             { name: "Open Source", href: "/open-source" },
             { name: "Changelog", href: "/changelog" },
