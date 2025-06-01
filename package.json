@@ -15,7 +15,8 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.18.0",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.456.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "14.2.6",
@@ -29,6 +30,7 @@
     "three": "^0.177.0"
   },
   "devDependencies": {
+    "@types/animejs": "^3.1.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

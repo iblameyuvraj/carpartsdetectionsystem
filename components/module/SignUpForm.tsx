@@ -507,7 +507,7 @@ useEffect(() => {
                 className="ml-2 block text-sm text-foreground cursor-pointer select-none"
                 onClick={handleCheckboxChange}
               >
-                I agree to the <a href="#" className="text-primary hover:text-primary-light transition-colors">Terms and Conditions</a>
+                I agree to the <a href="/terms" className="text-primary hover:text-primary-light transition-colors">Terms and Conditions</a>
               </label>
             </div>
             {errors.terms && (
