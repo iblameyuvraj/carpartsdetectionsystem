@@ -1,6 +1,6 @@
 <img src="https://github.com/user-attachments/assets/a1d7ced5-e6fc-41fd-9256-9d73a5f33597" alt="Orbit Logo" width="50" height="50">
 
-# 🔗 Orbit - AI Powered Content Creation Platform (Landing Page UI)
+# 🔗 Orbit - AI Powered Car-part-detection system
 
 <img src="/public/images/git.png" alt="Orbit Thumbnail" style="border-radius: 12px;" width="1280">
 
