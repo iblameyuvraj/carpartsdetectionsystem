@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
+import { signUp as firebaseSignUp } from '@/lib/auth-services';
 
 interface FormData {
   name: string;
@@ -276,31 +277,76 @@ useEffect(() => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validate()) {
       setIsSubmitting(true);
+      setErrors({});
+      setIsSuccess(false);
       
-      // Simulate API call
-      setTimeout(() => {
-        console.log('Form submitted:', formData);
-        setIsSubmitting(false);
+      try {
+        console.log('Starting sign up process...');
+        const user = await firebaseSignUp(formData.email, formData.password, formData.name);
+        console.log('User signed up successfully:', user);
+        
+        // Clear form and show success message
         setIsSuccess(true);
         setFormData({ name: '', email: '', password: '', confirmPassword: '' });
         setIsChecked(false);
         
-        // Reset success message after 3 seconds
-        setTimeout(() => setIsSuccess(false), 3000);
-      }, 1500);
+        // Show success message for 2 seconds before redirecting
+        setTimeout(() => {
+          window.location.href = '/verify-email';
+        }, 2000);
+      } catch (error: any) {
+        console.error('Sign up error:', error);
+        let errorMessage = 'An error occurred during sign up';
+        
+        // Handle specific Firebase error codes
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'This email is already registered';
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address';
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'Password is too weak';
+            setErrors(prev => ({ ...prev, password: errorMessage }));
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = 'Network error. Please check your internet connection';
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many attempts. Please try again later';
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+            break;
+          case 'auth/operation-not-allowed':
+            errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+            break;
+          default:
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    signIn('google', { callbackUrl: '/dashboard' }).finally(() => {
+    try {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (error) {
+      console.error('Google sign in error:', error);
+    } finally {
       setGoogleLoading(false);
-    });
+    }
   };
 
   return (
@@ -336,7 +382,10 @@ useEffect(() => {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium">
-                    Account created successfully!
+                    Account created successfully! Please check your email for verification.
+                  </p>
+                  <p className="text-sm mt-1">
+                    Redirecting to verification page...
                   </p>
                 </div>
               </div>
@@ -531,7 +580,7 @@ useEffect(() => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span className="transition-all duration-300">Processing...</span>
+                    <span className="transition-all duration-300">Creating Account...</span>
                   </div>
                 ) : (
                   <span className="transition-all duration-300">Sign Up</span>

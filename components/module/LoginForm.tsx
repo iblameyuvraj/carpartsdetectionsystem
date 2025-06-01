@@ -1,10 +1,11 @@
-
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
+import { signIn as firebaseSignIn } from '@/lib/auth-services';
+import { useRouter } from 'next/navigation';
 
 interface FormData {
   email: string;
@@ -25,7 +26,7 @@ interface Particle {
   color: string;
 }
 
-export default function LoginPage() {
+export default function LoginForm() {
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -39,6 +40,7 @@ export default function LoginPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const animationFrameRef = useRef<number>(0);
+  const router = useRouter();
 
   // Particle animation effect
   useEffect(() => {
@@ -194,34 +196,53 @@ export default function LoginPage() {
     setRememberMe(!rememberMe);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (validate()) {
-      setIsSubmitting(true);
+    setErrors({});
+    setIsSubmitting(true);
+
+    try {
+      await firebaseSignIn(formData.email, formData.password);
+      router.push('/dashboard');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setErrors({
+        ...errors,
+        email: error.message?.includes('verify your email') ? 'Email not verified' : 'Invalid email or password',
+        password: error.message?.includes('verify your email') ? 'Email not verified' : 'Invalid email or password'
+      });
       
-      // Simulate login API call
-      setTimeout(() => {
-        console.log('Login submitted:', formData);
-        setIsSubmitting(false);
-        setIsSuccess(true);
-        
-        // Reset form
-        if (!rememberMe) {
-          setFormData({ email: '', password: '' });
-        }
-        
-        // Reset success message after 3 seconds
-        setTimeout(() => setIsSuccess(false), 3000);
-      }, 1500);
+      // If the error is about unverified email, provide a link to resend verification
+      if (error.message?.includes('verify your email')) {
+        setErrors(prev => ({
+          ...prev,
+          email: (
+            <div className="space-y-2">
+              <p>{error.message}</p>
+              <Link 
+                href="/verify-email" 
+                className="text-primary hover:text-primary/90 underline"
+              >
+                Click here to resend verification email
+              </Link>
+            </div>
+          )
+        }));
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    signIn('google', { callbackUrl: '/dashboard' }).finally(() => {
+    try {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (error) {
+      console.error('Google sign in error:', error);
+    } finally {
       setGoogleLoading(false);
-    });
+    }
   };
 
   return (
