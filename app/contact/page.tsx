@@ -42,7 +42,7 @@ export default function ContactPage() {
     mountRef.current.appendChild(renderer.domElement);
 
     // Create animated network/constellation
-    const nodes = [];
+    const nodes: THREE.Mesh[] = [];
     const connections = [];
     const nodeCount = 25;
 
