@@ -106,7 +106,7 @@ export default function ContactPage() {
     }
 
     // Create floating geometric shapes for extra flair
-    const floatingShapes = [];
+    const floatingShapes: THREE.Mesh[] = [];
     for (let i = 0; i < 8; i++) {
       const geometries = [
         new THREE.TetrahedronGeometry(1),
@@ -233,12 +233,24 @@ export default function ContactPage() {
       // Clean up all geometries and materials
       [...nodes, ...floatingShapes].forEach(obj => {
         if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) obj.material.dispose();
+        if (obj.material) {
+          if (Array.isArray(obj.material)) {
+            obj.material.forEach(material => material.dispose());
+          } else {
+            obj.material.dispose();
+          }
+        }
       });
       
       connections.forEach(({ line }) => {
         if (line.geometry) line.geometry.dispose();
-        if (line.material) line.material.dispose();
+        if (line.material) {
+          if (Array.isArray(line.material)) {
+            line.material.forEach(material => material.dispose());
+          } else {
+            line.material.dispose();
+          }
+        }
       });
       
       if (rendererRef.current) {
