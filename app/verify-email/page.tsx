@@ -73,7 +73,7 @@ export default function VerifyEmailPage() {
   const handleBackToLogin = () => {
     if (!isVerified) {
       const confirmed = window.confirm(
-        'You haven\'t verified your email yet. Are you sure you want to go back to login?'
+        'You haven&apos;t verified your email yet. Are you sure you want to go back to login?'
       );
       if (!confirmed) return;
     }
@@ -87,12 +87,12 @@ export default function VerifyEmailPage() {
           <h2 className="text-3xl font-bold text-foreground">Verify Your Email</h2>
           {userEmail && (
             <p className="mt-2 text-muted-foreground">
-              We've sent a verification email to <span className="font-medium">{userEmail}</span>
+              We&apos;ve sent a verification email to <span className="font-medium">{userEmail}</span>
             </p>
           )}
           <div className="mt-4 text-sm text-muted-foreground">
             <p>Please check your email and click the verification link to continue.</p>
-            <p className="mt-2">If you don't see the email:</p>
+            <p className="mt-2">If you don&apos;t see the email:</p>
             <ul className="list-disc list-inside mt-2 space-y-1">
               <li>Check your spam/junk folder</li>
               <li>Make sure the email address is correct</li>

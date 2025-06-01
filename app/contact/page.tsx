@@ -295,7 +295,7 @@ export default function ContactPage() {
               </span>
             </h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Ready to start your next project? Let's create something amazing together.
+              Ready to start your next project? Let&apos;s create something amazing together.
             </p>
           </div>
 
@@ -311,7 +311,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-green-400 mb-2">Message Sent!</h3>
-                  <p className="text-gray-300">Thank you for reaching out. We'll get back to you soon.</p>
+                  <p className="text-gray-300">Thank you for reaching out. We&apos;ll get back to you soon.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -401,7 +401,7 @@ export default function ContactPage() {
             {/* Contact Info */}
             <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/30 shadow-xl">
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Let's Connect
+                Let&apos;s Connect
               </h3>
               
               <div className="space-y-6">

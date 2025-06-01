@@ -85,7 +85,7 @@ export default function LoginForm() {
             {loading ? 'Logging in...' : 'Login'}
           </Button>
           <div className="text-sm text-center">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/sign-up" className="text-primary hover:underline">
               Sign up
             </Link>

@@ -156,7 +156,7 @@ export default function PrivacyTermsPage() {
         <div className="bg-black/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-gray-800/50">
           <header className="mb-12 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 mb-4">
-              Privacy Policy & Terms and Conditions
+              Privacy Policy &amp; Terms and Conditions
             </h1>
             <p className="text-gray-400 text-sm">
               Last updated:{' '}
