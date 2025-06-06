@@ -7,6 +7,9 @@ export default function ContactPage() {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const nodesRef = useRef<THREE.Mesh[]>([]);
+  const connectionsRef = useRef<{ line: THREE.Line; nodeA: THREE.Mesh; nodeB: THREE.Mesh }[]>([]);
+  const floatingShapesRef = useRef<THREE.Mesh[]>([]);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -77,6 +80,7 @@ export default function ContactPage() {
       nodes.push(sphere);
       scene.add(sphere);
     }
+    nodesRef.current = nodes;
 
     // Create connections between nearby nodes
     for (let i = 0; i < nodes.length; i++) {
@@ -104,6 +108,7 @@ export default function ContactPage() {
         }
       }
     }
+    connectionsRef.current = connections;
 
     // Create floating geometric shapes for extra flair
     const floatingShapes: THREE.Mesh[] = [];
@@ -142,6 +147,7 @@ export default function ContactPage() {
       floatingShapes.push(shape);
       scene.add(shape);
     }
+    floatingShapesRef.current = floatingShapes;
 
     const clock = new THREE.Clock();
 
@@ -154,7 +160,7 @@ export default function ContactPage() {
       const time = clock.getElapsedTime();
 
       // Animate nodes
-      nodes.forEach((node, index) => {
+      nodesRef.current.forEach((node, index) => {
         const userData = node.userData;
         node.position.y = userData.originalPosition.y + 
           Math.sin(time * userData.floatSpeed + index) * userData.floatRange;
@@ -168,7 +174,7 @@ export default function ContactPage() {
       });
 
       // Update connections
-      connections.forEach(({ line, nodeA, nodeB }) => {
+      connectionsRef.current.forEach(({ line, nodeA, nodeB }) => {
         const positions = line.geometry.attributes.position.array as Float32Array;
         positions[0] = nodeA.position.x;
         positions[1] = nodeA.position.y;
@@ -185,7 +191,7 @@ export default function ContactPage() {
       });
 
       // Animate floating shapes
-      floatingShapes.forEach((shape) => {
+      floatingShapesRef.current.forEach((shape) => {
         shape.rotation.x += shape.userData.rotationSpeed.x;
         shape.rotation.y += shape.userData.rotationSpeed.y;
         shape.rotation.z += shape.userData.rotationSpeed.z;
@@ -219,7 +225,7 @@ export default function ContactPage() {
     window.addEventListener('resize', onResize);
 
     // Cleanup
-    const cleanup = () => {
+    return () => {
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
@@ -229,7 +235,7 @@ export default function ContactPage() {
       }
       
       // Clean up all geometries and materials
-      [...nodes, ...floatingShapes].forEach(obj => {
+      [...nodesRef.current, ...floatingShapesRef.current].forEach(obj => {
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) {
           if (Array.isArray(obj.material)) {
@@ -240,7 +246,7 @@ export default function ContactPage() {
         }
       });
       
-      connections.forEach(({ line }) => {
+      connectionsRef.current.forEach(({ line }) => {
         if (line.geometry) line.geometry.dispose();
         if (line.material) {
           if (Array.isArray(line.material)) {
@@ -257,10 +263,11 @@ export default function ContactPage() {
       
       sceneRef.current = null;
       rendererRef.current = null;
+      nodesRef.current = [];
+      connectionsRef.current = [];
+      floatingShapesRef.current = [];
     };
-
-    return cleanup;
-  }, [nodes, floatingShapes, connections]);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
