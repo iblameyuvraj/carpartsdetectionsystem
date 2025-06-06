@@ -6,6 +6,9 @@ import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import { signIn as firebaseSignIn } from '@/lib/auth-services';
 import { useRouter } from 'next/navigation';
+import { signInWithGoogle } from '@/lib/auth';
+import { auth } from '@/lib/firebase';
+import { fetchSignInMethodsForEmail, signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
 
 interface FormData {
   email: string;
@@ -41,6 +44,8 @@ export default function LoginForm() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const animationFrameRef = useRef<number>(0);
   const router = useRouter();
+  const [showNoAccountPopup, setShowNoAccountPopup] = useState(false);
+  const [popupEmail, setPopupEmail] = useState('');
 
   // Particle animation effect
   useEffect(() => {
@@ -202,18 +207,14 @@ export default function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      await firebaseSignIn(formData.email, formData.password);
+      await signInWithEmail(formData.email, formData.password);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Login error:', error);
-      setErrors({
-        ...errors,
-        email: error.message?.includes('verify your email') ? 'Email not verified' : 'Invalid email or password',
-        password: error.message?.includes('verify your email') ? 'Email not verified' : 'Invalid email or password'
-      });
-      
-      // If the error is about unverified email, provide a link to resend verification
-      if (error.message?.includes('verify your email')) {
+      if (error.message === 'ACCOUNT_NOT_FOUND') {
+        setPopupEmail(formData.email);
+        setShowNoAccountPopup(true);
+      } else if (error.message?.includes('verify your email')) {
         setErrors(prev => ({
           ...prev,
           email: (
@@ -228,6 +229,12 @@ export default function LoginForm() {
             </div>
           )
         }));
+      } else {
+        setErrors({
+          ...errors,
+          email: 'Invalid email or password',
+          password: 'Invalid email or password'
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -237,16 +244,65 @@ export default function LoginForm() {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
-      await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (error) {
+      await signInWithGoogle();
+      router.push('/dashboard');
+    } catch (error: any) {
       console.error('Google sign in error:', error);
+      if (error.message === 'ACCOUNT_NOT_FOUND') {
+        setPopupEmail(auth.currentUser?.email || '');
+        setShowNoAccountPopup(true);
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        setErrors(prev => ({ ...prev, email: 'Sign-in was cancelled. Please try again.' }));
+      } else {
+        setErrors(prev => ({ ...prev, email: error.message }));
+      }
     } finally {
       setGoogleLoading(false);
     }
   };
 
+  const NoAccountPopup = () => {
+    if (!showNoAccountPopup) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-card p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+              <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-foreground mb-2">Account Not Found</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              The email {popupEmail} is not registered in our system. Please sign up first to create an account.
+            </p>
+            <div className="flex flex-col space-y-3">
+              <Link
+                href="/sign-up"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:text-sm"
+              >
+                Sign Up Now
+              </Link>
+              <button
+                onClick={() => {
+                  setShowNoAccountPopup(false);
+                  setGoogleLoading(false);
+                }}
+                className="w-full inline-flex justify-center rounded-md border border-border/50 shadow-sm px-4 py-2 bg-card text-base font-medium text-foreground hover:bg-accent/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:text-sm"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="relative min-h-screen w-full overflow-auto">
+      <NoAccountPopup />
       {/* Interactive Canvas Background */}
       <canvas 
         ref={canvasRef} 
@@ -266,7 +322,7 @@ export default function LoginForm() {
               Welcome Back
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Sign in to your account
+              log in to your account
             </p>
           </div>
 
@@ -302,7 +358,7 @@ export default function LoginForm() {
               ) : (
                 <>
                   <FcGoogle className="h-5 w-5 mr-2" />
-                  <span>Sign in with Google</span>
+                  <span>log in with Google</span>
                 </>
               )}
             </button>
@@ -434,10 +490,10 @@ export default function LoginForm() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span className="transition-all duration-300">Signing in...</span>
+                    <span className="transition-all duration-300">loging in...</span>
                   </div>
                 ) : (
-                  <span className="transition-all duration-300">Sign In</span>
+                  <span className="transition-all duration-300">log In</span>
                 )}
               </button>
             </div>

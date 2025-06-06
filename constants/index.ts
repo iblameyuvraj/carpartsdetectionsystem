@@ -157,20 +157,19 @@ export const FOOTER_LINKS = [
     {
         title: "Product",
         links: [
-            { name: "Home", href: "/" },
-            { name: "Features", href: "/" },
-            { name: "Pricing", href: "/" },
-            { name: "Contact", href: "/" },
-            { name: "Download", href: "/" },
+            { name: "Home", href: "/sign-up" },
+            { name: "Pricing(soon)", href: "/" },
+            { name: "Contact", href: "/contact" },
+            { name: "comming soon", href: "/" },
         ],
     },
     {
         title: "Resources",
         links: [
-            { name: "Blog", href: "/blog" },
-            { name: "Help Center", href: "/help-center" },
-            { name: "Community", href: "/community" },
-            { name: "Guides", href: "/guides" },
+            // { name: "Blog", href: "/blog" },
+            { name: "Help Center", href: "/contact" },
+            // { name: "Community", href: "/community" },
+            // { name: "Guides", href: "/guides" },
         ],
     },
     {

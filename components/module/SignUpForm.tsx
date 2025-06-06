@@ -5,6 +5,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { signUp as firebaseSignUp } from '@/lib/auth-services';
+import { signInWithGoogle } from '@/lib/auth';
 
 interface FormData {
   name: string;
@@ -341,9 +342,18 @@ useEffect(() => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
-      await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (error) {
+      const { user, error } = await signInWithGoogle();
+      if (error) {
+        console.error('Google sign in error:', error);
+        setErrors(prev => ({ ...prev, email: error }));
+      }
+      if (user) {
+        // Redirect to dashboard on successful sign in
+        window.location.href = '/dashboard';
+      }
+    } catch (error: any) {
       console.error('Google sign in error:', error);
+      setErrors(prev => ({ ...prev, email: error.message }));
     } finally {
       setGoogleLoading(false);
     }

@@ -1,8 +1,6 @@
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,43 +8,22 @@ const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
-let app: FirebaseApp;
-try {
-  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-} catch (error) {
-  console.error('Firebase initialization error:', error);
-  throw error;
-}
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const googleProvider = new GoogleAuthProvider();
 
-// Initialize Auth
-const auth = getAuth(app);
+// Configure Google provider
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
-// Initialize Firestore
-const db = getFirestore(app);
+// Initialize Firestore collections
+export const usersCollection = collection(db, 'users');
 
-// Initialize Storage
-const storage = getStorage(app);
-
-// Initialize Analytics conditionally (only in browser environment)
-let analytics = null;
-if (typeof window !== 'undefined') {
-  isSupported().then(yes => yes && (analytics = getAnalytics(app)));
-}
-
-// Development environment setup
-if (process.env.NODE_ENV === 'development') {
-  if (typeof window !== 'undefined') {
-    // Connect to emulators if running locally
-    if (process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === 'true') {
-      connectAuthEmulator(auth, 'http://localhost:9099');
-      connectFirestoreEmulator(db, 'localhost', 8080);
-    }
-  }
-}
-
-export { app, auth, db, storage, analytics }; 
+// Helper function to get user document reference
+export const getUserDoc = (userId: string) => doc(usersCollection, userId);

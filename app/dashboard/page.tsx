@@ -1,47 +1,42 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { getCurrentUser } from '@/lib/auth-services';
-import { User } from 'firebase/auth';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function DashboardPage() {
+  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      } catch (error) {
-        console.error('Error loading user:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
+    const user = getCurrentUser();
+    if (user?.displayName) {
+      setUserName(user.displayName);
+    } else if (user?.email) {
+      setUserName(user.email.split('@')[0]);
+    }
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen p-8">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        {user && (
-          <div className="bg-card p-4 rounded-lg shadow">
-            <p>Welcome, {user.displayName || user.email}!</p>
+    <div className="container mx-auto p-6">
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-center">
+            Welcome{userName ? `, ${userName}` : ''}! 👋
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center space-y-4">
+            <p className="text-lg text-muted-foreground">
+              You've successfully logged into your dashboard.
+            </p>
+            <div className="bg-muted p-4 rounded-lg">
+              <p className="text-sm">
+                This is your personal space. You can start exploring the features available to you.
+              </p>
+            </div>
           </div>
-        )}
-      </div>
-    </ProtectedRoute>
+        </CardContent>
+      </Card>
+    </div>
   );
-} 
+}
