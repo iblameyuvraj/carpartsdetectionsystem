@@ -3,12 +3,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["./components/*"],
-      "@lib/*": ["./lib/*"],
-      "@contexts/*": ["./contexts/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@constants/*": ["./constants/*"],
-      "@app/*": ["./app/*"]
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./components/*"],
+      "@/components/ui/*": ["./components/ui/*"]
     },
     "module": "ESNext",
     "moduleResolution": "node",
