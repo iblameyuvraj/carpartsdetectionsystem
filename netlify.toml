@@ -1,5 +1,5 @@
 [build]
-  command = "npm install --force && npm install --save-dev typescript@5.3.3 && npm run build"
+  command = "npm install && npm run build"
   publish = ".next"
 
 [build.environment]
@@ -7,6 +7,8 @@
   NODE_VERSION = "18"
   NODE_ENV = "production"
   NEXT_PUBLIC_TENSORFLOW_JS_VERSION = "4.17.0"
+  NPM_CONFIG_PRODUCTION = "false"
+  NPM_CONFIG_LEGACY_PEER_DEPS = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs" 
