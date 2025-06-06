@@ -5,6 +5,13 @@
 [build.environment]
   NEXT_TELEMETRY_DISABLED = "1"
   NODE_VERSION = "18"
+  NODE_ENV = "production"
+  NEXT_PUBLIC_TENSORFLOW_JS_VERSION = "4.17.0"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs" 
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
