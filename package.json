@@ -15,6 +15,7 @@
     "@radix-ui/react-navigation-menu": "^1.2.1",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@tensorflow/tfjs": "^4.17.0",
     "@types/jsonwebtoken": "^9.0.9",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.0",
