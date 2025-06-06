@@ -207,7 +207,7 @@ export default function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      await signInWithEmail(formData.email, formData.password);
+      await firebaseSignIn(formData.email, formData.password);
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Login error:', error);

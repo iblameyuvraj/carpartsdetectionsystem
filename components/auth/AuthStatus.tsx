@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getCurrentUser, signOutUser } from '@/lib/auth-services';
+import { getCurrentUser, logOut } from '@/lib/auth-services';
 import { useRouter } from 'next/navigation';
 
 export default function AuthStatus() {
@@ -21,7 +21,7 @@ export default function AuthStatus() {
 
   const handleSignOut = async () => {
     try {
-      await signOutUser();
+      await logOut();
       setUser(null);
       router.push('/log-in');
     } catch (error) {
