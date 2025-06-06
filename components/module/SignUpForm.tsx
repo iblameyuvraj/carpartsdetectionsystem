@@ -1,7 +1,7 @@
 // components/module/SignUpForm.tsx
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { signUp as firebaseSignUp } from '@/lib/auth-services';
@@ -95,57 +95,14 @@ const SignUpForm: React.FC = () => {
     };
   }, []);
 
-// Animate particles
-useEffect(() => {
-  if (!canvasRef.current) return;
-  
-  const canvas = canvasRef.current;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  
-  // Set canvas to full window size
-  const resizeCanvas = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  };
-  resizeCanvas();
-  
-  // Initialize particles
-  const particles: Particle[] = [];
-  const colors = [
-    'hsla(262, 83%, 58%, 0.4)',
-    'hsla(262, 84%, 66%, 0.3)',
-    'hsla(256, 42%, 25%, 0.25)',
-    'hsla(240, 3.7%, 15.9%, 0.2)'
-  ];
-  
-  // Create particles with more natural movement
-  const createParticle = (): Particle => {
-    const speed = Math.random() * 0.8 + 0.2; // Slower, smoother movement
-    const angle = Math.random() * Math.PI * 2; // Random direction
-    
-    return {
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 3 + 1,
-      speedX: Math.cos(angle) * speed,
-      speedY: Math.sin(angle) * speed,
-      color: colors[Math.floor(Math.random() * colors.length)]
-    };
-  };
-  
-  // Create initial particles
-  const particleCount = window.innerWidth < 768 ? 40 : 70;
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(createParticle());
-  }
-  
-  let animationFrameId: number;
-  
-  const animate = () => {
+  const animate = useCallback(() => {
     // Clear canvas with transparent background for trailing effect
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
     ctx.fillStyle = 'hsla(240, 10%, 3.9%, 0.1)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     
     // Update and draw particles
     for (let i = 0; i < particles.length; i++) {
@@ -171,11 +128,11 @@ useEffect(() => {
       p.y += p.speedY;
       
       // Seamless wrapping around edges
-      if (p.x > canvas.width + 20) p.x = -20;
-      else if (p.x < -20) p.x = canvas.width + 20;
+      if (p.x > canvasRef.current.width + 20) p.x = -20;
+      else if (p.x < -20) p.x = canvasRef.current.width + 20;
       
-      if (p.y > canvas.height + 20) p.y = -20;
-      else if (p.y < -20) p.y = canvas.height + 20;
+      if (p.y > canvasRef.current.height + 20) p.y = -20;
+      else if (p.y < -20) p.y = canvasRef.current.height + 20;
     }
     
     // Draw connections on desktop
@@ -201,24 +158,64 @@ useEffect(() => {
       }
     }
     
-    animationFrameId = requestAnimationFrame(animate);
-  };
-  
-  // Start animation
-  animate();
-  
-  // Handle resize
-  const handleResize = () => {
-    resizeCanvas();
-  };
-  
-  window.addEventListener('resize', handleResize);
-  
-  return () => {
-    cancelAnimationFrame(animationFrameId);
-    window.removeEventListener('resize', handleResize);
-  };
-}, []);
+    animationFrameRef.current = requestAnimationFrame(animate);
+  }, [particles]);
+
+  const handleResize = useCallback(() => {
+    if (!canvasRef.current) return;
+    canvasRef.current.width = window.innerWidth;
+    canvasRef.current.height = window.innerHeight;
+  }, []);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Set canvas to full window size
+    handleResize();
+    
+    // Initialize particles
+    const colors = [
+      'hsla(262, 83%, 58%, 0.4)',
+      'hsla(262, 84%, 66%, 0.3)',
+      'hsla(256, 42%, 25%, 0.25)',
+      'hsla(240, 3.7%, 15.9%, 0.2)'
+    ];
+    
+    // Create particles with more natural movement
+    const createParticle = (): Particle => {
+      const speed = Math.random() * 0.8 + 0.2; // Slower, smoother movement
+      const angle = Math.random() * Math.PI * 2; // Random direction
+      
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speedX: Math.cos(angle) * speed,
+        speedY: Math.sin(angle) * speed,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      };
+    };
+    
+    // Create initial particles
+    const particleCount = window.innerWidth < 768 ? 40 : 70;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(createParticle());
+    }
+    
+    // Start animation
+    animate();
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      cancelAnimationFrame(animationFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [animate, handleResize]);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};

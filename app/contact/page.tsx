@@ -219,9 +219,7 @@ export default function ContactPage() {
     window.addEventListener('resize', onResize);
 
     // Cleanup
-    return () => {
-      window.removeEventListener('resize', onResize);
-      
+    const cleanup = () => {
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
@@ -260,7 +258,9 @@ export default function ContactPage() {
       sceneRef.current = null;
       rendererRef.current = null;
     };
-  }, []);
+
+    return cleanup;
+  }, [nodes, floatingShapes, connections]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

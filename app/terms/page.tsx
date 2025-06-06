@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 
 export default function PrivacyTermsPage() {
@@ -7,6 +7,17 @@ export default function PrivacyTermsPage() {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationIdRef = useRef<number | null>(null);
+
+  const onResize = useCallback(() => {
+    if (!mountRef.current || !rendererRef.current) return;
+    
+    const width = mountRef.current.clientWidth;
+    const height = mountRef.current.clientHeight;
+    
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    rendererRef.current.setSize(width, height);
+  }, [camera]);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -119,7 +130,7 @@ export default function PrivacyTermsPage() {
     window.addEventListener('resize', onResize);
 
     // Cleanup function
-    return () => {
+    const cleanup = useCallback(() => {
       window.removeEventListener('resize', onResize);
       
       if (animationIdRef.current) {
@@ -139,7 +150,9 @@ export default function PrivacyTermsPage() {
       
       sceneRef.current = null;
       rendererRef.current = null;
-    };
+    }, [geometry, material, onResize]);
+
+    return cleanup;
   }, []);
 
   return (
