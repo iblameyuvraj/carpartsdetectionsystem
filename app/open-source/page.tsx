@@ -46,7 +46,7 @@ export default function OpenSourcePage() {
           <h2 className="text-2xl font-semibold mb-4">How to Contribute</h2>
           <div className="space-y-4">
             <p className="text-gray-600">
-              We welcome contributions from the community! Here's how you can get involved:
+              We welcome contributions from the community! Here&apos;s how you can get involved:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-600">
               <li>Report bugs and suggest features</li>

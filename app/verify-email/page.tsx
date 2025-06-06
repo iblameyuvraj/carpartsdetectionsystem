@@ -72,7 +72,7 @@ export default function VerifyEmailPage() {
   const handleBackToLogin = () => {
     if (!isVerified) {
       const confirmed = window.confirm(
-        'You haven\'t verified your email yet. Are you sure you want to go back to login?'
+        'You haven&apos;t verified your email yet. Are you sure you want to go back to login?'
       );
       if (!confirmed) return;
     }

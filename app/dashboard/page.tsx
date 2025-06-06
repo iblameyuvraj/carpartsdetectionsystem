@@ -21,7 +21,7 @@ export default function DashboardPage() {
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">
-            Welcome{userName ? `, ${userName}` : ''}! 👋
+            Welcome{userName ? `, ${userName}` : ""}! 👋
           </CardTitle>
         </CardHeader>
         <CardContent>
