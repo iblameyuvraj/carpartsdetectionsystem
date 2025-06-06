@@ -37,6 +37,10 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    // Ensure path aliases are properly resolved
+    experimental: {
+        esmExternals: true,
+    },
 };
 
 export default nextConfig;
