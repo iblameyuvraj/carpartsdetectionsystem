@@ -7,17 +7,18 @@ export default function PrivacyTermsPage() {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
 
   const onResize = useCallback(() => {
-    if (!mountRef.current || !rendererRef.current) return;
+    if (!mountRef.current || !rendererRef.current || !cameraRef.current) return;
     
     const width = mountRef.current.clientWidth;
     const height = mountRef.current.clientHeight;
     
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+    cameraRef.current.aspect = width / height;
+    cameraRef.current.updateProjectionMatrix();
     rendererRef.current.setSize(width, height);
-  }, [camera]);
+  }, []);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -33,6 +34,7 @@ export default function PrivacyTermsPage() {
       1000
     );
     camera.position.z = 50;
+    cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
@@ -80,7 +82,7 @@ export default function PrivacyTermsPage() {
 
     // Animate particles floating
     function animate() {
-      if (!sceneRef.current || !rendererRef.current) return;
+      if (!sceneRef.current || !rendererRef.current || !cameraRef.current) return;
       
       animationIdRef.current = requestAnimationFrame(animate);
 
@@ -110,27 +112,15 @@ export default function PrivacyTermsPage() {
       particles.rotation.y += 0.001;
       particles.rotation.x += 0.0005;
 
-      rendererRef.current.render(scene, camera);
+      rendererRef.current.render(scene, cameraRef.current);
     }
 
     animate();
-
-    // Resize handler
-    function onResize() {
-      if (!mountRef.current || !rendererRef.current) return;
-      
-      const width = mountRef.current.clientWidth;
-      const height = mountRef.current.clientHeight;
-      
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      rendererRef.current.setSize(width, height);
-    }
     
     window.addEventListener('resize', onResize);
 
     // Cleanup function
-    const cleanup = useCallback(() => {
+    return () => {
       window.removeEventListener('resize', onResize);
       
       if (animationIdRef.current) {
@@ -150,10 +140,9 @@ export default function PrivacyTermsPage() {
       
       sceneRef.current = null;
       rendererRef.current = null;
-    }, [geometry, material, onResize]);
-
-    return cleanup;
-  }, []);
+      cameraRef.current = null;
+    };
+  }, [onResize]);
 
   return (
     <div className="relative min-h-screen w-full bg-black text-white">

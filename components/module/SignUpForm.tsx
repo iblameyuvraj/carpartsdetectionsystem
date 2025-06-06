@@ -202,9 +202,11 @@ const SignUpForm: React.FC = () => {
     
     // Create initial particles
     const particleCount = window.innerWidth < 768 ? 40 : 70;
+    const newParticles: Particle[] = [];
     for (let i = 0; i < particleCount; i++) {
-      particles.push(createParticle());
+      newParticles.push(createParticle());
     }
+    setParticles(newParticles);
     
     // Start animation
     animate();

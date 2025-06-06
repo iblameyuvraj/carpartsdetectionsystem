@@ -100,7 +100,7 @@ export default function VerifyEmailPage() {
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                We've sent you a verification email. Please check your inbox and click the verification link.
+                We&apos;ve sent you a verification email. Please check your inbox and click the verification link.
               </p>
               {error && (
                 <div className={`rounded-md p-4 ${

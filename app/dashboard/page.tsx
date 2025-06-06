@@ -27,7 +27,7 @@ export default function DashboardPage() {
         <CardContent>
           <div className="text-center space-y-4">
             <p className="text-lg text-muted-foreground">
-              You've successfully logged into your dashboard.
+              You&apos;ve successfully logged into your dashboard.
             </p>
             <div className="bg-muted p-4 rounded-lg">
               <p className="text-sm">
