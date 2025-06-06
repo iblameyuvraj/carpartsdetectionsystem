@@ -25,6 +25,12 @@ const nextConfig = {
             };
         }
 
+        // Explicitly configure path aliases
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            '@': require('path').resolve(__dirname),
+        };
+
         return config;
     },
     // Disable strict mode in production to avoid double-rendering
