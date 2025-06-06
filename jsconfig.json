@@ -9,6 +9,15 @@
       "@hooks/*": ["./hooks/*"],
       "@constants/*": ["./constants/*"],
       "@app/*": ["./app/*"]
-    }
-  }
+    },
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", ".next", "out"]
 } 
