@@ -207,16 +207,16 @@ const SignUpForm: React.FC = () => {
       newParticles.push(createParticle());
     }
     setParticles(newParticles);
-    
-    // Start animation
-    animate();
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
+  
+  // Start animation
+  animate();
+  
+  window.addEventListener('resize', handleResize);
+  
+  return () => {
       cancelAnimationFrame(animationFrameRef.current);
-      window.removeEventListener('resize', handleResize);
-    };
+    window.removeEventListener('resize', handleResize);
+  };
   }, [animate, handleResize]);
 
   const validate = (): boolean => {
