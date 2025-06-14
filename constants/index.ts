@@ -158,7 +158,7 @@ export const FOOTER_LINKS = [
         title: "Product",
         links: [
             { name: "Home", href: "/sign-up" },
-            { name: "Pricing(soon)", href: "/" },
+            { name: "Pricing", href: "/pricing" },
             { name: "Contact", href: "/contact" },
             { name: "comming soon", href: "/" },
         ],
@@ -169,7 +169,7 @@ export const FOOTER_LINKS = [
             // { name: "Blog", href: "/blog" },
             { name: "Help Center", href: "/contact" },
             // { name: "Community", href: "/community" },
-            // { name: "Guides", href: "/guides" },
+             { name: "Guides", href: "/guides" },
         ],
     },
     {

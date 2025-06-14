@@ -1,11 +1,9 @@
 // components/module/SignUpForm.tsx
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { signIn } from 'next-auth/react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { signUp as firebaseSignUp } from '@/lib/auth-services';
-import { signInWithGoogle } from '@/lib/auth';
+import Link from 'next/link';
 
 interface FormData {
   name: string;
@@ -43,130 +41,12 @@ const SignUpForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const animationFrameRef = useRef<number>(0);
-  const lastRenderRef = useRef(0);
-  const fps = 30;
 
-  // Initialize particles
-  const initParticles = () => {
-    const newParticles: Particle[] = [];
-    const colors = [
-      'hsla(262, 54.10%, 43.50%, 0.82)',
-      'hsla(264, 16.10%, 87.80%, 0.97)',
-      'hsla(256, 81.60%, 44.70%, 0.76)',
-      'hsla(240, 5.50%, 82.20%, 0.80)'
-    ];
-    
-    const particleCount = window.innerWidth < 768 ? 30 : 50;
-    
-    for (let i = 0; i < particleCount; i++) {
-      newParticles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        size: Math.random() * 2 + 1,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      });
-    }
-    
-    setParticles(newParticles);
-  };
-
-  useEffect(() => {
-    initParticles();
-    
-    const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-      }
-      initParticles();
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, []);
-
-  const animate = useCallback(() => {
-    // Clear canvas with transparent background for trailing effect
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    ctx.fillStyle = 'hsla(240, 10%, 3.9%, 0.1)';
-    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    
-    // Update and draw particles
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      
-      // Draw particle with glow effect
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      
-      // Create glow effect
-      const gradient = ctx.createRadialGradient(
-        p.x, p.y, 0,
-        p.x, p.y, p.size * 3
-      );
-      gradient.addColorStop(0, p.color);
-      gradient.addColorStop(1, 'hsla(262, 83%, 58%, 0)');
-      
-      ctx.fillStyle = gradient;
-      ctx.fill();
-      
-      // Update position with continuous movement
-      p.x += p.speedX;
-      p.y += p.speedY;
-      
-      // Seamless wrapping around edges
-      if (p.x > canvasRef.current.width + 20) p.x = -20;
-      else if (p.x < -20) p.x = canvasRef.current.width + 20;
-      
-      if (p.y > canvasRef.current.height + 20) p.y = -20;
-      else if (p.y < -20) p.y = canvasRef.current.height + 20;
-    }
-    
-    // Draw connections on desktop
-    if (window.innerWidth > 768) {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const p1 = particles[i];
-          const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 120) {
-            const opacity = 1 - distance / 120;
-            ctx.beginPath();
-            ctx.strokeStyle = `hsla(262, 83%, 58%, ${opacity * 0.1})`;
-            ctx.lineWidth = 0.2;
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-    
-    animationFrameRef.current = requestAnimationFrame(animate);
-  }, [particles]);
-
-  const handleResize = useCallback(() => {
-    if (!canvasRef.current) return;
-    canvasRef.current.width = window.innerWidth;
-    canvasRef.current.height = window.innerHeight;
-  }, []);
-
+  // Particle animation effect
   useEffect(() => {
     if (!canvasRef.current) return;
     
@@ -175,9 +55,14 @@ const SignUpForm: React.FC = () => {
     if (!ctx) return;
     
     // Set canvas to full window size
-    handleResize();
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
     
     // Initialize particles
+    const particles: Particle[] = [];
     const colors = [
       'hsla(262, 83%, 58%, 0.4)',
       'hsla(262, 84%, 66%, 0.3)',
@@ -185,10 +70,10 @@ const SignUpForm: React.FC = () => {
       'hsla(240, 3.7%, 15.9%, 0.2)'
     ];
     
-    // Create particles with more natural movement
+    // Create particles with natural movement
     const createParticle = (): Particle => {
-      const speed = Math.random() * 0.8 + 0.2; // Slower, smoother movement
-      const angle = Math.random() * Math.PI * 2; // Random direction
+      const speed = Math.random() * 0.8 + 0.2;
+      const angle = Math.random() * Math.PI * 2;
       
       return {
         x: Math.random() * canvas.width,
@@ -202,22 +87,86 @@ const SignUpForm: React.FC = () => {
     
     // Create initial particles
     const particleCount = window.innerWidth < 768 ? 40 : 70;
-    const newParticles: Particle[] = [];
     for (let i = 0; i < particleCount; i++) {
-      newParticles.push(createParticle());
+      particles.push(createParticle());
     }
-    setParticles(newParticles);
-  
-  // Start animation
-  animate();
-  
-  window.addEventListener('resize', handleResize);
-  
-  return () => {
+    
+    const animate = () => {
+      // Clear canvas with transparent background
+      ctx.fillStyle = 'hsla(240, 10%, 3.9%, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Update and draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        
+        // Draw particle with glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        
+        const gradient = ctx.createRadialGradient(
+          p.x, p.y, 0,
+          p.x, p.y, p.size * 3
+        );
+        gradient.addColorStop(0, p.color);
+        gradient.addColorStop(1, 'hsla(262, 83%, 58%, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        // Update position
+        p.x += p.speedX;
+        p.y += p.speedY;
+        
+        // Seamless wrapping around edges
+        if (p.x > canvas.width + 20) p.x = -20;
+        else if (p.x < -20) p.x = canvas.width + 20;
+        
+        if (p.y > canvas.height + 20) p.y = -20;
+        else if (p.y < -20) p.y = canvas.height + 20;
+      }
+      
+      // Draw connections on desktop
+      if (window.innerWidth > 768) {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p1 = particles[i];
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 120) {
+              const opacity = 1 - distance / 120;
+              ctx.beginPath();
+              ctx.strokeStyle = `hsla(262, 83%, 58%, ${opacity * 0.1})`;
+              ctx.lineWidth = 0.2;
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+    
+    // Start animation
+    animationFrameRef.current = requestAnimationFrame(animate);
+    
+    // Handle resize
+    const handleResize = () => {
+      resizeCanvas();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
       cancelAnimationFrame(animationFrameRef.current);
-    window.removeEventListener('resize', handleResize);
-  };
-  }, [animate, handleResize]);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -286,98 +235,50 @@ const SignUpForm: React.FC = () => {
       setIsSuccess(false);
       
       try {
-        console.log('Starting sign up process...');
-        const user = await firebaseSignUp(formData.email, formData.password, formData.name);
-        console.log('User signed up successfully:', user);
+        // TODO: Implement your authentication logic here
+        console.log('Form submitted:', formData);
         
-        // Clear form and show success message
+        // For now, just simulate success
         setIsSuccess(true);
         setFormData({ name: '', email: '', password: '', confirmPassword: '' });
         setIsChecked(false);
         
         // Show success message for 2 seconds before redirecting
         setTimeout(() => {
-          window.location.href = '/verify-email';
+          window.location.href = '/dashboard';
         }, 2000);
-      } catch (error: any) {
+      } catch (error) {
         console.error('Sign up error:', error);
-        let errorMessage = 'An error occurred during sign up';
-        
-        // Handle specific Firebase error codes
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            errorMessage = 'This email is already registered';
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-            break;
-          case 'auth/invalid-email':
-            errorMessage = 'Invalid email address';
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-            break;
-          case 'auth/weak-password':
-            errorMessage = 'Password is too weak';
-            setErrors(prev => ({ ...prev, password: errorMessage }));
-            break;
-          case 'auth/network-request-failed':
-            errorMessage = 'Network error. Please check your internet connection';
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-            break;
-          case 'auth/too-many-requests':
-            errorMessage = 'Too many attempts. Please try again later';
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-            break;
-          case 'auth/operation-not-allowed':
-            errorMessage = 'Email/password accounts are not enabled. Please contact support.';
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-            break;
-          default:
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-        }
+        setErrors(prev => ({
+          ...prev,
+          submit: 'An error occurred during sign up. Please try again.'
+        }));
       } finally {
         setIsSubmitting(false);
       }
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    try {
-      const { user, error } = await signInWithGoogle();
-      if (error) {
-        console.error('Google sign in error:', error);
-        setErrors(prev => ({ ...prev, email: error }));
-      }
-      if (user) {
-        // Redirect to dashboard on successful sign in
-        window.location.href = '/dashboard';
-      }
-    } catch (error: any) {
-      console.error('Google sign in error:', error);
-      setErrors(prev => ({ ...prev, email: error.message }));
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
-
   return (
     <div className="relative min-h-screen w-full overflow-auto">
-      {/* Interactive Canvas Background */}
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="fixed inset-0 w-full h-full z-0"
       />
       
-      {/* Content Overlay */}
       <div className="relative z-10 min-h-screen flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-6 bg-card bg-opacity-80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-border/30 mx-4 my-8">
           <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-full">
+                {/* Logo placeholder */}
+              </div>
+            </div>
             <h2 className="mt-2 text-3xl font-extrabold text-foreground">
               Create your account
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <a href="/log-in" className="font-medium text-primary hover:text-primary-light transition-colors">
-                Log in
-              </a>
+              Join us today and start your journey
             </p>
           </div>
 
@@ -391,34 +292,21 @@ const SignUpForm: React.FC = () => {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium">
-                    Account created successfully! Please check your email for verification.
-                  </p>
-                  <p className="text-sm mt-1">
-                    Redirecting to verification page...
+                    Account created successfully! Redirecting...
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Google Sign In Button */}
+          {/* Google Sign Up Button */}
           <div>
             <button
-              onClick={handleGoogleSignIn}
-              disabled={googleLoading}
+              type="button"
               className="w-full flex justify-center items-center py-3 px-4 border border-border/50 rounded-md shadow-sm text-sm font-medium text-foreground bg-card bg-opacity-50 hover:bg-accent/20 transition-colors duration-300"
             >
-              {googleLoading ? (
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              ) : (
-                <>
-                  <FcGoogle className="h-5 w-5 mr-2" />
-                  <span>Sign up with Google</span>
-                </>
-              )}
+              <FcGoogle className="h-5 w-5 mr-2" />
+              <span>Sign up with Google</span>
             </button>
           </div>
 
@@ -428,14 +316,14 @@ const SignUpForm: React.FC = () => {
               <div className="w-full border-t border-border/30"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-card bg-opacity-80 text-muted-foreground">or continue with email</span>
+              <span className="px-2 bg-card bg-opacity-80 text-muted-foreground">or with email</span>
             </div>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="rounded-md -space-y-px">
               {/* Name Field */}
-              <div className="mb-3">
+              <div className="mb-4">
                 <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
                   Full Name
                 </label>
@@ -457,7 +345,7 @@ const SignUpForm: React.FC = () => {
               </div>
 
               {/* Email Field */}
-              <div className="mb-3">
+              <div className="mb-4">
                 <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
                   Email address
                 </label>
@@ -479,7 +367,7 @@ const SignUpForm: React.FC = () => {
               </div>
 
               {/* Password Field */}
-              <div className="mb-3">
+              <div className="mb-4">
                 <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
                   Password
                 </label>
@@ -501,7 +389,7 @@ const SignUpForm: React.FC = () => {
               </div>
 
               {/* Confirm Password Field */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">
                   Confirm Password
                 </label>
@@ -539,8 +427,6 @@ const SignUpForm: React.FC = () => {
                     isChecked 
                       ? 'bg-primary border-primary' 
                       : 'bg-card bg-opacity-50 border-border/50 hover:border-primary'
-                  } ${
-                    errors.terms ? 'border-destructive' : ''
                   }`}
                 >
                   {isChecked && (
@@ -565,11 +451,18 @@ const SignUpForm: React.FC = () => {
                 className="ml-2 block text-sm text-foreground cursor-pointer select-none"
                 onClick={handleCheckboxChange}
               >
-                I agree to the <a href="/terms" className="text-primary hover:text-primary-light transition-colors">Terms and Conditions</a>
+                I agree to the{' '}
+                <Link href="/terms" className="text-primary hover:text-primary-light transition-colors">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="text-primary hover:text-primary-light transition-colors">
+                  Privacy Policy
+                </Link>
               </label>
             </div>
             {errors.terms && (
-              <p className="mt-1 text-sm text-destructive animate-fadeIn">{errors.terms}</p>
+              <p className="text-sm text-destructive animate-fadeIn">{errors.terms}</p>
             )}
 
             <div className="mt-4">
@@ -578,7 +471,7 @@ const SignUpForm: React.FC = () => {
                 type="submit"
                 disabled={isSubmitting}
                 className={`btn-primary w-full flex justify-center py-2.5 px-4 text-sm font-medium rounded-md text-white transition-all duration-300 ease-out ${
-                  isSubmitting 
+                  isSubmitting
                     ? 'opacity-80 cursor-not-allowed' 
                     : 'hover:scale-[1.02] active:scale-[0.98]'
                 }`}
@@ -589,14 +482,23 @@ const SignUpForm: React.FC = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span className="transition-all duration-300">Creating Account...</span>
+                    <span className="transition-all duration-300">Creating account...</span>
                   </div>
                 ) : (
-                  <span className="transition-all duration-300">Sign Up</span>
+                  <span className="transition-all duration-300">Create Account</span>
                 )}
               </button>
             </div>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/log-in" className="font-medium text-primary hover:text-primary-light transition-colors">
+                Log in
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

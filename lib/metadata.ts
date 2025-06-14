@@ -19,7 +19,7 @@ interface MetadataProps {
 export const generateMetadata = ({
     title = `Orbit AI `,
     description = "AI-powered car part detection system that streamlines automotive diagnostics and inventory management by accurately identifying car parts from images using advanced machine learning algorithms.",
-    image = "/thumbnail.png",
+    image = "/git.png",
     icons = [
         {
             rel: "icon",
@@ -43,7 +43,7 @@ export const generateMetadata = ({
         "artificial intelligence",
         "content marketing"
     ],
-    author = "Yuvraj soni and aryan arror",
+    author = "Yuvraj soni and aryan arorra",
     twitterHandle = "@iblameyuvrajj",
     type = "website",
     locale = "en_US",

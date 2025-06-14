@@ -18,7 +18,7 @@ const Connect = () => {
                 </div>
             </Container>
             <Container>
-                <div className="w-full relative mt-12">
+                <div className="w-full relative mt-12" aria-hidden="true">
                     <Images.connect className="w-full h-auto" />
                     <Particles
                         className="absolute inset-0"

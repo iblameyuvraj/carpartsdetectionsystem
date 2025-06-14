@@ -8,19 +8,39 @@ const Companies = () => {
                 <h2 className="text-xl heading">
                     Companies that trust us
                 </h2>
-                <div className="mt-16 w-full relative overflow-hidden">
+                <div className="mt-16 w-full relative overflow-hidden" aria-hidden="true">
                     <Marquee pauseOnHover className="[--duration:30s]">
                         <div className="flex gap-8 md:gap-12">
-                            <Images.company1 className="w-24 h-8" />
-                            <Images.company2 className="w-24 h-8" />
-                            <Images.company3 className="w-24 h-8" />
-                            <Images.company4 className="w-24 h-8" />
-                            <Images.company5 className="w-24 h-8" />
-                            <Images.company6 className="w-24 h-8" />
-                            <Images.company7 className="w-24 h-8" />
-                            <Images.company8 className="w-24 h-8" />
-                            <Images.company9 className="w-24 h-8" />
-                            <Images.company10 className="w-24 h-8" />
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company1 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company2 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company3 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company4 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company5 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company6 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company7 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company8 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company9 className="w-full h-full" />
+                            </div>
+                            <div className="w-24 h-8" aria-hidden="true">
+                                <Images.company10 className="w-full h-full" />
+                            </div>
                         </div>
                     </Marquee>
                     <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>

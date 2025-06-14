@@ -62,6 +62,8 @@ const Hero = () => {
                             width={1920}
                             height={1080}
                             className="rounded-lg lg:rounded-[20px]"
+                            loading="lazy"
+                            priority={false}
                         />
                     </div>
                 </div>

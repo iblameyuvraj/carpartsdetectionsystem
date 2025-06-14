@@ -2,15 +2,41 @@ import { Spotlight } from '@/components/ui/spotlight';
 import Background from '@/components/global/background';
 import Container from '@/components/global/container';
 import Wrapper from '@/components/global/wrapper';
-import Companies from '@/components/module/companies';
-import Hero from '@/components/module/hero';
-import Connect from '@/components/module/connect';
-import Features from '@/components/module/features';
-import Perks from '@/components/module/perks';
-import Pricing from '@/components/module/pricing';
-import Reviews from '@/components/module/reviews';
-import CTA from '@/components/module/cta';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import SignUpForm from '@/components/module/SignUpForm';
+
+// Lazy load components that are below the fold
+const Companies = dynamic(() => import('@/components/module/companies'), {
+    loading: () => <div className="h-32 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const Connect = dynamic(() => import('@/components/module/connect'), {
+    loading: () => <div className="h-64 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const Features = dynamic(() => import('@/components/module/features'), {
+    loading: () => <div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const Perks = dynamic(() => import('@/components/module/perks'), {
+    loading: () => <div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const Pricing = dynamic(() => import('@/components/module/pricing'), {
+    loading: () => <div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const Reviews = dynamic(() => import('@/components/module/reviews'), {
+    loading: () => <div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+const CTA = dynamic(() => import('@/components/module/cta'), {
+    loading: () => <div className="h-64 w-full animate-pulse bg-gray-200 rounded-lg" />
+});
+
+// Keep Hero component as regular import since it's above the fold
+import Hero from '@/components/module/hero';
 
 const HomePage = () => {
     return (
@@ -24,14 +50,28 @@ const HomePage = () => {
                     <Hero />
                 </Container>
                 <Container className="py-8 lg:py-20">
-                    <Companies />
+                    <Suspense fallback={<div className="h-32 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                        <Companies />
+                    </Suspense>
                 </Container>
-                <Connect />
-                <Features />
-                <Perks />
-                <Pricing />
-                <Reviews />
-                <CTA />
+                <Suspense fallback={<div className="h-64 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <Connect />
+                </Suspense>
+                <Suspense fallback={<div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <Features />
+                </Suspense>
+                <Suspense fallback={<div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <Perks />
+                </Suspense>
+                <Suspense fallback={<div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <Pricing />
+                </Suspense>
+                <Suspense fallback={<div className="h-96 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <Reviews />
+                </Suspense>
+                <Suspense fallback={<div className="h-64 w-full animate-pulse bg-gray-200 rounded-lg" />}>
+                    <CTA />
+                </Suspense>
             </Wrapper>
         </Background>
     )

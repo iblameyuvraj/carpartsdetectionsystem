@@ -44,110 +44,95 @@ export default function ContactPage() {
     
     mountRef.current.appendChild(renderer.domElement);
 
-    // Create animated network/constellation
-    const nodes: THREE.Mesh[] = [];
-    const connections: { line: THREE.Line; nodeA: THREE.Mesh; nodeB: THREE.Mesh }[] = [];
-    const nodeCount = 25;
+    // Create particles
+    const particles: THREE.Mesh[] = [];
+    const particleCount = 100;
 
-    // Create nodes (glowing spheres)
-    for (let i = 0; i < nodeCount; i++) {
-      const geometry = new THREE.SphereGeometry(0.15, 16, 16);
+    // Create particles (small glowing points)
+    for (let i = 0; i < particleCount; i++) {
+      const geometry = new THREE.SphereGeometry(0.1, 8, 8);
       const material = new THREE.MeshBasicMaterial({
         color: new THREE.Color().setHSL(
-          (Math.random() * 0.2) + 0.7, // Blue to purple range
+          (Math.random() * 0.1) + 0.6, // Dark blue to purple range
           0.8,
-          0.7
+          0.5
         ),
         transparent: true,
-        opacity: 0.8
+        opacity: 0.6
       });
 
-      const sphere = new THREE.Mesh(geometry, material);
+      const particle = new THREE.Mesh(geometry, material);
       
-      sphere.position.set(
+      particle.position.set(
+        (Math.random() - 0.5) * 60,
         (Math.random() - 0.5) * 50,
-        (Math.random() - 0.5) * 40,
-        (Math.random() - 0.5) * 20
+        (Math.random() - 0.5) * 30
       );
 
-      sphere.userData = {
-        originalPosition: sphere.position.clone(),
-        floatSpeed: Math.random() * 0.5 + 0.2,
-        floatRange: Math.random() * 3 + 1,
-        rotationSpeed: (Math.random() - 0.5) * 0.01
+      particle.userData = {
+        originalPosition: particle.position.clone(),
+        speed: Math.random() * 0.2 + 0.1,
+        amplitude: Math.random() * 5 + 2,
+        phase: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.02
       };
 
-      nodes.push(sphere);
-      scene.add(sphere);
+      particles.push(particle);
+      scene.add(particle);
     }
-    nodesRef.current = nodes;
+    nodesRef.current = particles;
 
-    // Create connections between nearby nodes
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const distance = nodes[i].position.distanceTo(nodes[j].position);
+    // Create connections between nearby particles
+    const connections: { line: THREE.Line; nodeA: THREE.Mesh; nodeB: THREE.Mesh }[] = [];
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const distance = particles[i].position.distanceTo(particles[j].position);
         
-        if (distance < 15 && Math.random() > 0.6) {
+        if (distance < 20 && Math.random() > 0.7) {
           const geometry = new THREE.BufferGeometry();
           const positions = new Float32Array([
-            nodes[i].position.x, nodes[i].position.y, nodes[i].position.z,
-            nodes[j].position.x, nodes[j].position.y, nodes[j].position.z
+            particles[i].position.x, particles[i].position.y, particles[i].position.z,
+            particles[j].position.x, particles[j].position.y, particles[j].position.z
           ]);
           
           geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
           
           const material = new THREE.LineBasicMaterial({
-            color: 0x4f46e5,
+            color: 0x2a2a4a,
             transparent: true,
-            opacity: 0.3
+            opacity: 0.2
           });
           
           const line = new THREE.Line(geometry, material);
-          connections.push({ line, nodeA: nodes[i], nodeB: nodes[j] });
+          connections.push({ line, nodeA: particles[i], nodeB: particles[j] });
           scene.add(line);
         }
       }
     }
     connectionsRef.current = connections;
 
-    // Create floating geometric shapes for extra flair
-    const floatingShapes: THREE.Mesh[] = [];
-    for (let i = 0; i < 8; i++) {
-      const geometries = [
-        new THREE.TetrahedronGeometry(1),
-        new THREE.OctahedronGeometry(0.8),
-        new THREE.IcosahedronGeometry(0.6)
-      ];
-      
-      const geometry = geometries[Math.floor(Math.random() * geometries.length)];
-      const material = new THREE.MeshBasicMaterial({
-        color: new THREE.Color().setHSL(0.8 + Math.random() * 0.1, 0.6, 0.5),
+    // Create dark energy waves
+    const waveGeometry = new THREE.RingGeometry(20, 21, 32);
+    const waveMaterial = new THREE.MeshBasicMaterial({
+      color: 0x1a1a2e,
         transparent: true,
-        opacity: 0.2,
-        wireframe: true
+      opacity: 0.1,
+      side: THREE.DoubleSide
       });
 
-      const shape = new THREE.Mesh(geometry, material);
-      shape.position.set(
-        (Math.random() - 0.5) * 60,
-        (Math.random() - 0.5) * 50,
-        (Math.random() - 0.5) * 30
-      );
-
-      shape.userData = {
-        rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.02,
-          y: (Math.random() - 0.5) * 0.02,
-          z: (Math.random() - 0.5) * 0.02
-        },
-        floatSpeed: Math.random() * 0.3 + 0.1,
-        originalY: shape.position.y
+    const waves: THREE.Mesh[] = [];
+    for (let i = 0; i < 3; i++) {
+      const wave = new THREE.Mesh(waveGeometry, waveMaterial.clone());
+      wave.rotation.x = Math.PI / 2;
+      wave.position.z = -10;
+      wave.userData = {
+        speed: 0.2 + i * 0.1,
+        scale: 1 + i * 0.5
       };
-
-      floatingShapes.push(shape);
-      scene.add(shape);
+      waves.push(wave);
+      scene.add(wave);
     }
-    floatingShapesRef.current = floatingShapes;
+    floatingShapesRef.current = waves;
 
     const clock = new THREE.Clock();
 
@@ -159,18 +144,33 @@ export default function ContactPage() {
 
       const time = clock.getElapsedTime();
 
-      // Animate nodes
-      nodesRef.current.forEach((node, index) => {
-        const userData = node.userData;
-        node.position.y = userData.originalPosition.y + 
-          Math.sin(time * userData.floatSpeed + index) * userData.floatRange;
+      // Animate particles
+      nodesRef.current.forEach((particle, index) => {
+        const userData = particle.userData;
         
-        node.position.x = userData.originalPosition.x + 
-          Math.cos(time * userData.floatSpeed * 0.7 + index) * (userData.floatRange * 0.5);
+        // Complex movement pattern
+        particle.position.x = userData.originalPosition.x + 
+          Math.sin(time * userData.speed + userData.phase) * userData.amplitude;
+        particle.position.y = userData.originalPosition.y + 
+          Math.cos(time * userData.speed * 0.7 + userData.phase) * userData.amplitude;
+        particle.position.z = userData.originalPosition.z + 
+          Math.sin(time * userData.speed * 0.5 + userData.phase) * (userData.amplitude * 0.5);
+
+        // Subtle rotation
+        particle.rotation.x += userData.rotationSpeed;
+        particle.rotation.y += userData.rotationSpeed;
 
         // Pulse effect
         const scale = 1 + Math.sin(time * 2 + index) * 0.2;
-        node.scale.setScalar(scale);
+        particle.scale.setScalar(scale);
+
+        // Color shift
+        const material = particle.material as THREE.MeshBasicMaterial;
+        material.color.setHSL(
+          (Math.sin(time * 0.1 + index) * 0.1) + 0.6,
+          0.8,
+          0.5
+        );
       });
 
       // Update connections
@@ -184,25 +184,23 @@ export default function ContactPage() {
         positions[5] = nodeB.position.z;
         line.geometry.attributes.position.needsUpdate = true;
 
-        // Animate connection opacity
+        // Dynamic opacity based on distance
         const distance = nodeA.position.distanceTo(nodeB.position);
-        const opacity = Math.max(0, 0.5 - distance / 30);
+        const opacity = Math.max(0, 0.3 - distance / 40);
         (line.material as THREE.LineBasicMaterial).opacity = opacity;
       });
 
-      // Animate floating shapes
-      floatingShapesRef.current.forEach((shape) => {
-        shape.rotation.x += shape.userData.rotationSpeed.x;
-        shape.rotation.y += shape.userData.rotationSpeed.y;
-        shape.rotation.z += shape.userData.rotationSpeed.z;
-        
-        shape.position.y = shape.userData.originalY + 
-          Math.sin(time * shape.userData.floatSpeed) * 5;
+      // Animate waves
+      floatingShapesRef.current.forEach((wave, index) => {
+        wave.scale.setScalar(1 + Math.sin(time * wave.userData.speed) * 0.2);
+        wave.rotation.z += 0.001;
+        (wave.material as THREE.MeshBasicMaterial).opacity = 
+          0.1 + Math.sin(time * wave.userData.speed + index) * 0.05;
       });
 
-      // Camera gentle movement
-      camera.position.x = Math.sin(time * 0.1) * 2;
-      camera.position.y = Math.cos(time * 0.15) * 1;
+      // Camera movement
+      camera.position.x = Math.sin(time * 0.1) * 3;
+      camera.position.y = Math.cos(time * 0.15) * 2;
       camera.lookAt(0, 0, 0);
 
       rendererRef.current.render(scene, camera);
@@ -295,7 +293,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full text-white">
+    <div className="relative min-h-screen w-full text-white bg-gradient-to-b from-gray-900 via-gray-950 to-black">
       {/* Three.js Background */}
       <div
         ref={mountRef}
@@ -309,11 +307,11 @@ export default function ContactPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
                 Get In Touch
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Ready to start your next project? Let&apos;s create something amazing together.
             </p>
           </div>
@@ -321,22 +319,22 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Form */}
-            <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+            <div className="bg-black/60 backdrop-blur-xl rounded-2xl p-8 border border-gray-800/50 shadow-2xl">
               {submitted ? (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-green-400 mb-2">Message Sent!</h3>
-                  <p className="text-gray-300">Thank you for reaching out. We&apos;ll get back to you soon.</p>
+                  <p className="text-gray-400">Thank you for reaching out. We&apos;ll get back to you soon.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
                         Name
                       </label>
                       <input
@@ -345,13 +343,13 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 group-hover:border-gray-500"
+                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 group-hover:border-gray-700"
                         placeholder="Your Name"
                       />
                     </div>
                     
                     <div className="group">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
                         Email
                       </label>
                       <input
@@ -360,14 +358,14 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 group-hover:border-gray-500"
+                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 group-hover:border-gray-700"
                         placeholder="your@email.com"
                       />
                     </div>
                   </div>
 
                   <div className="group">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
                       Subject
                     </label>
                     <input
@@ -376,13 +374,13 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 group-hover:border-gray-500"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 group-hover:border-gray-700"
                       placeholder="Subject"
                     />
                   </div>
 
                   <div className="group">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
                       Message
                     </label>
                     <textarea
@@ -391,7 +389,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none group-hover:border-gray-500"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 resize-none group-hover:border-gray-700"
                       placeholder="Tell us about your problem..."
                     />
                   </div>
@@ -399,7 +397,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
+                    className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
                   >
                     <span className="relative z-10">
                       {isSubmitting ? (
@@ -411,45 +409,45 @@ export default function ContactPage() {
                         'Send Message'
                       )}
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </button>
                 </form>
               )}
             </div>
 
             {/* Contact Info */}
-            <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/30 shadow-xl">
-              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-gray-800/30 shadow-xl">
+              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
                 Let&apos;s Connect
               </h3>
               
               <div className="space-y-6">
-                <div className="flex items-start space-x-4 group hover:bg-gray-800/30 p-4 rounded-lg transition-all duration-300">
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/30 transition-all duration-300">
+                <div className="flex items-start space-x-4 group hover:bg-gray-900/30 p-4 rounded-lg transition-all duration-300">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center group-hover:bg-blue-500/20 transition-all duration-300">
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
                     <h4 className="font-semibold text-white mb-1">Email</h4>
-                    <p className="text-gray-300">xyz@gmail.com</p>
+                    <p className="text-gray-400">xyz@gmail.com</p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4 group hover:bg-gray-800/30 p-4 rounded-lg transition-all duration-300">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center group-hover:bg-purple-500/30 transition-all duration-300">
+                <div className="flex items-start space-x-4 group hover:bg-gray-900/30 p-4 rounded-lg transition-all duration-300">
+                  <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center group-hover:bg-purple-500/20 transition-all duration-300">
                     <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
                   <div>
                     <h4 className="font-semibold text-white mb-1">Phone</h4>
-                    <p className="text-gray-300">+91-0000000000</p>
+                    <p className="text-gray-400">+91-0000000000</p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4 group hover:bg-gray-800/30 p-4 rounded-lg transition-all duration-300">
-                  <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center group-hover:bg-cyan-500/30 transition-all duration-300">
+                <div className="flex items-start space-x-4 group hover:bg-gray-900/30 p-4 rounded-lg transition-all duration-300">
+                  <div className="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center group-hover:bg-cyan-500/20 transition-all duration-300">
                     <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -457,26 +455,26 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-white mb-1">Location</h4>
-                    <p className="text-gray-300">xyz</p>
+                    <p className="text-gray-400">xyz</p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4 group hover:bg-gray-800/30 p-4 rounded-lg transition-all duration-300">
-                  <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center group-hover:bg-green-500/30 transition-all duration-300">
+                <div className="flex items-start space-x-4 group hover:bg-gray-900/30 p-4 rounded-lg transition-all duration-300">
+                  <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center group-hover:bg-green-500/20 transition-all duration-300">
                     <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div>
                     <h4 className="font-semibold text-white mb-1">Response Time</h4>
-                    <p className="text-gray-300">Within 24 hours</p>
+                    <p className="text-gray-400">Within 24 hours</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-gray-700/50">
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  we love to hear from you! Whether you have a question about our services, need assistance, or just want to say hello, feel free to reach out. Our team is here to help and will get back to you as soon as possible.
+              <div className="mt-8 pt-6 border-t border-gray-800/50">
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  We love to hear from you! Whether you have a question about our services, need assistance, or just want to say hello, feel free to reach out. Our team is here to help and will get back to you as soon as possible.
                 </p>
               </div>
             </div>

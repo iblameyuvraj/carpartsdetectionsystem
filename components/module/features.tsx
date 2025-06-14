@@ -36,7 +36,7 @@ const Features = () => {
                             </MagicCard>
                             <MagicCard particles={true} className="flex flex-col items-start w-full bg-primary/[0.08]">
                                 <div className="bento-card w-full flex-row gap-6">
-                                    <div className="w-full h-40">
+                                    <div className="w-full h-40" aria-hidden="true">
                                         <Images.analytics className="w-full h-full" />
                                     </div>
                                     <div className="flex flex-col">
@@ -55,7 +55,7 @@ const Features = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-5 lg:gap-5">
                             <MagicCard particles={true} className="flex flex-col items-start w-full row-span-1 bg-primary/[0.08]">
                                 <div className="bento-card w-full flex-row gap-6">
-                                    <div className="w-full h-52 relative">
+                                    <div className="w-full h-52 relative" aria-hidden="true">
                                         <Images.ideation className="w-full h-full" />
                                         <div className="w-40 h-40 rounded-full bg-primary/10 blur-3xl -z-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
                                     </div>
@@ -105,7 +105,7 @@ const Features = () => {
                                             50,000+ entries covering all makes and models.
                                         </p>
                                     </div>
-                                    <div className="w-full h-28 relative">
+                                    <div className="w-full h-28 relative" aria-hidden="true">
                                         <Images.integration className="w-full h-full" />
                                         <div className="w-28 h-28 rounded-full bg-primary/10 blur-3xl -z-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full"></div>
                                     </div>
@@ -117,7 +117,7 @@ const Features = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-[.40fr_1fr] w-full gap-5 lg:gap-5">
                             <MagicCard particles={true} className="flex flex-col items-start w-full bg-primary/[0.08]">
                                 <div className="bento-card w-full flex-row gap-6">
-                                    <div className="w-full">
+                                    <div className="w-full" aria-hidden="true">
                                         <Images.image className="w-full h-40 lg:h-auto" />
                                     </div>
                                     <div className="flex flex-col mt-auto">
@@ -132,7 +132,7 @@ const Features = () => {
                             </MagicCard>
                             <MagicCard particles={true} className="flex flex-col items-start w-full bg-primary/[0.08]">
                                 <div className="bento-card w-full flex-row gap-6">
-                                    <div className="w-full">
+                                    <div className="w-full" aria-hidden="true">
                                         <Images.hash className="w-full h-40 lg:h-52" />
                                     </div>
                                     <div className="flex flex-col mt-auto">
